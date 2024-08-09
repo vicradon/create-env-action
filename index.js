@@ -1,45 +1,63 @@
 const core = require("@actions/core");
 const github = require("@actions/github");
-const { writeFile } = require("node:fs/promises");
+const { readFile, writeFile } = require("node:fs/promises");
 
 async function run() {
   try {
-    const envFileName = core.getInput("env_file_name") || "app.env";
+    const inputFileName = core.getInput("input_file");
+    const outputFileName = core.getInput("output_file") || "app.env";
 
-    const secrets = [
-      "APP_NAME",
-      "APP_URL",
-      "SERVER_PORT",
-      "DB_NAME",
-      "USERNAME",
-      "REDIS_PORT",
-      "REDIS_HOST",
-      "REDIS_DB",
-      "GOOGLE_CLIENT_ID",
-      "GOOGLE_CLIENT_SECRET",
-      "FACEBOOK_CLIENT_ID",
-      "FACEBOOK_CLIENT_SECRET",
-      "SESSION_SECRET",
-      "MAIL_SERVER",
-      "MAIL_USERNAME",
-      "MAIL_PASSWORD",
-      "MAIL_PORT",
-      "MIGRATE",
-    ];
+    let fileContent;
 
-    let envString = "";
-
-    for (let secret of secrets) {
-      const value = core.getInput(secret);
-      envString += `${secret}=${value}\n`;
+    if (inputFileName) {
+      try {
+        fileContent = await readFile(inputFileName, "utf-8");
+      } catch (error) {
+        console.warn(
+          `Failed to read the input file (${inputFileName}): ${error.message}`
+        );
+      }
     }
 
-    const envFile = await writeFile(envFileName, envString, {
-      encoding: "utf-8",
-    });
+    const foundVariables = {};
 
-    core.setOutput("env_file", envFile);
+    for (const key in process.env) {
+      if (
+        key.startsWith("INPUT_") &&
+        key !== "INPUT_ACTION_INPUT_FILE" &&
+        key !== "INPUT_ACTION_OUTPUT_FILE"
+      ) {
+        const envVarName = key.substring(6); // Remove 'INPUT_' prefix
+        const envVarValue = process.env[key];
 
+        // Replace the placeholder in the file if it exists
+        const regex = new RegExp(`^${envVarName}=.*`, "gm");
+        if (regex.test(fileContent)) {
+          fileContent = fileContent.replace(
+            regex,
+            `${envVarName}=${envVarValue}`
+          );
+          foundVariables[envVarName] = true;
+        } else {
+          foundVariables[envVarName] = false;
+        }
+      }
+    }
+
+    // Append missing variables at the end of the file
+    for (const key in foundVariables) {
+      if (!foundVariables[key]) {
+        fileContent += `\n${key}=${process.env[`INPUT_${key}`]}`;
+      }
+    }
+
+    // Write the modified content to the output file
+    await writeFile(outputFileName, fileContent, { encoding: "utf-8" });
+
+    // Set the output file path as an output variable
+    core.setOutput("env_file", outputFileName);
+
+    // Optionally log the event payload
     const payload = JSON.stringify(github.context.payload, undefined, 2);
     console.log(`The event payload: ${payload}`);
   } catch (error) {
