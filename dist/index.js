@@ -31134,7 +31134,11 @@ async function run() {
 
     // Append missing variables at the end of the file
     for (const key in foundVariables) {
-      if (!foundVariables[key]) {
+      if (
+        !foundVariables[key] &&
+        key !== "INPUT_action_input_file" &&
+        key !== "INPUT_action_output_file"
+      ) {
         fileContent += `\n${key}=${process.env[`INPUT_${key}`]}`;
       }
     }
@@ -31144,10 +31148,6 @@ async function run() {
 
     // Set the output file path as an output variable
     core.setOutput("env_file", outputFileName);
-
-    // Optionally log the event payload
-    const payload = JSON.stringify(github.context.payload, undefined, 2);
-    console.log(`The event payload: ${payload}`);
   } catch (error) {
     core.setFailed(error.message);
   }
