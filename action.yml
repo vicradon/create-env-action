@@ -4,9 +4,11 @@ description: "An action that processes an .env file by replacing placeholders wi
 inputs:
   action_input_file:
     description: "The input file with placeholders (e.g., app-sample.env)"
+    required: false
   action_output_file:
     description: "The output file name"
     default: "app.env"
+    required: false
 
 outputs:
   env_file:

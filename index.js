@@ -4,8 +4,8 @@ const { readFile, writeFile } = require("node:fs/promises");
 
 async function run() {
   try {
-    const inputFileName = core.getInput("input_file");
-    const outputFileName = core.getInput("output_file") || "app.env";
+    const inputFileName = core.getInput("action_input_file");
+    const outputFileName = core.getInput("action_output_file") || "app.env";
 
     let fileContent;
 
@@ -24,8 +24,8 @@ async function run() {
     for (const key in process.env) {
       if (
         key.startsWith("INPUT_") &&
-        key !== "INPUT_ACTION_INPUT_FILE" &&
-        key !== "INPUT_ACTION_OUTPUT_FILE"
+        key !== "INPUT_action_input_file" &&
+        key !== "INPUT_action_output_file"
       ) {
         const envVarName = key.substring(6); // Remove 'INPUT_' prefix
         const envVarValue = process.env[key];
