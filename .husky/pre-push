@@ -1,0 +1,7 @@
+#!/bin/sh
+
+npx ncc build index.js -o action
+
+git add action/index.js
+
+git commit -m "Build action using ncc"
