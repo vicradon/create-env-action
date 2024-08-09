@@ -4,8 +4,7 @@
   "main": "index.js",
   "scripts": {
     "build-action": "npx ncc build index.js -o action",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "husky"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
@@ -16,7 +15,6 @@
     "@actions/github": "^6.0.0"
   },
   "devDependencies": {
-    "@vercel/ncc": "^0.38.1",
-    "husky": "^9.1.4"
+    "@vercel/ncc": "^0.38.1"
   }
 }

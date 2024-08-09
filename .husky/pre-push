@@ -1,6 +1,0 @@
-npm run build-action
-
-git add action/index.js
-
-git commit -m "Build action using ncc" || true
-
