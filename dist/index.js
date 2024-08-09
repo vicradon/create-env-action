@@ -31136,8 +31136,8 @@ async function run() {
     for (const key in foundVariables) {
       if (
         !foundVariables[key] &&
-        key !== "INPUT_action_input_file" &&
-        key !== "INPUT_action_output_file"
+        key !== "action_input_file" &&
+        key !== "action_output_file"
       ) {
         fileContent += `\n${key}=${process.env[`INPUT_${key}`]}`;
       }
