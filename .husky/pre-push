@@ -1,7 +1,9 @@
 #!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
 
-npx ncc build index.js -o action
+npm run build-action
 
 git add action/index.js
 
-git commit -m "Build action using ncc"
+git commit -m "Build action using ncc" || true
+
