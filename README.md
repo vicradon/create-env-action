@@ -55,6 +55,14 @@ jobs:
             ./deploy.sh
 ```
 
+## Inputs
+
+There are three required inputs:
+
+1. action_input_file - The path to the environment file you want to update
+2. action_output_file - The path to the environment file you want to create or update
+3. action_true_string_variables - A list of variables that should be written with quotes
+
 ## Considerations
 
 Github Actions will throw warnings for all the variables you set except the action_input_file and action_output_file. This is because we allow you to define any variable name you want and Github Actions does not know them.

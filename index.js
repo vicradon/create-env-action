@@ -6,6 +6,7 @@ async function run() {
   try {
     const inputFileName = core.getInput("action_input_file");
     const outputFileName = core.getInput("action_output_file");
+    const trueStringVariables = core.getInput("action_true_string_variables");
 
     let fileContent = "";
 
@@ -24,6 +25,7 @@ async function run() {
     const variablesToSkip = [
       "INPUT_ACTION_INPUT_FILE",
       "INPUT_ACTION_OUTPUT_FILE",
+      "INPUT_ACTION_TRUE_STRING_VARIABLES",
     ];
 
     for (const key in process.env) {
@@ -48,7 +50,11 @@ async function run() {
     // Append missing variables at the end of the file
     for (const key in foundVariables) {
       if (!foundVariables[key]) {
-        fileContent += `\n${key}=${process.env[`INPUT_${key}`]}`;
+        if (trueStringVariables.includes(key)) {
+          fileContent += `\n${key}="${process.env[`INPUT_${key}`]}"`;
+        } else {
+          fileContent += `\n${key}=${process.env[`INPUT_${key}`]}`;
+        }
       }
     }
 

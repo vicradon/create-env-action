@@ -9,6 +9,9 @@ inputs:
     description: "The output file name"
     default: ".env"
     required: false
+  action_true_string_variables:
+    description: "List of variables that should be treated as true strings. It should be passed as a yaml array of strings (e.g., - [DB_PASSWORD, MAIL_PASSWORD])."
+    required: false
 
 outputs:
   env_file:
