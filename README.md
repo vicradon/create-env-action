@@ -26,6 +26,9 @@ jobs:
         with:
           action_input_file: .env.sample
           action_output_file: .env
+          action_true_string_variables: |
+            DB_PASSWORD
+            APP_KEY
           DB_HOST: ${{ secrets.DB_HOST }}
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
@@ -34,6 +37,7 @@ jobs:
           REDIS_HOST: ${{ secrets.REDIS_HOST }}
           REDIS_PORT: ${{ secrets.REDIS_PORT }}
           APP_NAME: ${{ secrets.APP_NAME }}
+          APP_KEY: ${{ secrets.APP_KEY }}
 
       - name: Upload env file
         uses: appleboy/scp-action@v0.1.7
@@ -61,7 +65,7 @@ There are three required inputs:
 
 1. action_input_file - The path to the environment file you want to update
 2. action_output_file - The path to the environment file you want to create or update
-3. action_true_string_variables - A list of variables that should be written with quotes
+3. action_true_string_variables - A yaml, multi-line string that represents a list of variables that should be written with quotes
 
 ## Considerations
 

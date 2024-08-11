@@ -51,14 +51,13 @@ async function run() {
     for (const key in foundVariables) {
       if (!foundVariables[key]) {
         if (trueStringVariables.includes(key)) {
-          fileContent += `\n${key}="${process.env[`INPUT_${key}`]}"`;
+          const valueAsJSONString = JSON.stringify(process.env[`INPUT_${key}`]);
+          fileContent += `\n${key}=${valueAsJSONString}`;
         } else {
           fileContent += `\n${key}=${process.env[`INPUT_${key}`]}`;
         }
       }
     }
-
-    fileContent += `\n${JSON.stringify(trueStringVariables)}\njust-debug`;
 
     // Write the modified content to the output file
     await writeFile(outputFileName, fileContent, { encoding: "utf-8" });
