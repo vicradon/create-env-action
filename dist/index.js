@@ -31143,11 +31143,13 @@ async function run() {
     // Append missing variables at the end of the file
     for (const key in foundVariables) {
       if (!foundVariables[key]) {
+        let value = process.env[`INPUT_${key}`];
+
         if (trueStringVarsArray.includes(key)) {
-          const valueAsJSONString = JSON.stringify(process.env[`INPUT_${key}`]);
-          fileContent += `\n${key}=${valueAsJSONString}`;
+          const quotedValue = `"${value}"`;
+          fileContent += `\n${key}=${quotedValue}`;
         } else {
-          fileContent += `\n${key}=${process.env[`INPUT_${key}`]}`;
+          fileContent += `\n${key}=${value}`;
         }
       }
     }
