@@ -7,7 +7,7 @@ async function run() {
     const inputFileName = core.getInput("action_input_file");
     const outputFileName = core.getInput("action_output_file") || "app.env";
 
-    let fileContent;
+    let fileContent = "";
 
     if (inputFileName) {
       try {
@@ -21,12 +21,13 @@ async function run() {
 
     const foundVariables = {};
 
+    const variablesToSkip = [
+      "INPUT_action_input_file",
+      "INPUT_action_output_file",
+    ];
+
     for (const key in process.env) {
-      if (
-        key.startsWith("INPUT_") &&
-        key !== "INPUT_action_input_file" &&
-        key !== "INPUT_action_output_file"
-      ) {
+      if (key.startsWith("INPUT_") && !variablesToSkip.includes(key)) {
         const envVarName = key.substring(6); // Remove 'INPUT_' prefix
         const envVarValue = process.env[key];
 
@@ -46,11 +47,7 @@ async function run() {
 
     // Append missing variables at the end of the file
     for (const key in foundVariables) {
-      if (
-        !foundVariables[key] &&
-        key !== "action_input_file" &&
-        key !== "action_output_file"
-      ) {
+      if (!foundVariables[key]) {
         fileContent += `\n${key}=${process.env[`INPUT_${key}`]}`;
       }
     }

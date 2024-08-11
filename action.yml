@@ -7,7 +7,7 @@ inputs:
     required: false
   action_output_file:
     description: "The output file name"
-    default: "app.env"
+    default: ".env"
     required: false
 
 outputs:
