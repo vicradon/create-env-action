@@ -8,6 +8,11 @@ async function run() {
     const outputFileName = core.getInput("action_output_file");
     const trueStringVariables = core.getInput("action_true_string_variables");
 
+    const trueStringVarsArray = trueStringVariables
+      .split("\n")
+      .map((item) => item.trim())
+      .filter(Boolean);
+
     let fileContent = "";
 
     if (inputFileName) {
@@ -50,7 +55,7 @@ async function run() {
     // Append missing variables at the end of the file
     for (const key in foundVariables) {
       if (!foundVariables[key]) {
-        if (trueStringVariables.includes(key)) {
+        if (trueStringVarsArray.includes(key)) {
           const valueAsJSONString = JSON.stringify(process.env[`INPUT_${key}`]);
           fileContent += `\n${key}=${valueAsJSONString}`;
         } else {
@@ -58,6 +63,8 @@ async function run() {
         }
       }
     }
+
+    fileContent += `\n${JSON.stringify(trueStringVariables)}\njust-debug`;
 
     // Write the modified content to the output file
     await writeFile(outputFileName, fileContent, { encoding: "utf-8" });
