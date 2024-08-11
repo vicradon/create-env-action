@@ -22,7 +22,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
       - name: Create .env
-        uses: vicradon/create-env-action@v0.0.9
+        uses: vicradon/create-env-action@v1.0.0
         with:
           action_input_file: .env.sample
           action_output_file: .env
