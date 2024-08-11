@@ -26,6 +26,8 @@ async function run() {
       "INPUT_action_output_file",
       "INPUT_ACTION_INPUT_FILE",
       "INPUT_ACTION_OUTPUT_FILE",
+      "ACTION_INPUT_FILE",
+      "ACTION_OUTPUT_FILE",
     ];
 
     for (const key in process.env) {
