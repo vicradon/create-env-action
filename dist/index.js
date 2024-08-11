@@ -31093,7 +31093,7 @@ const { readFile, writeFile } = __nccwpck_require__(3977);
 async function run() {
   try {
     const inputFileName = core.getInput("action_input_file");
-    const outputFileName = core.getInput("action_output_file") || "app.env";
+    const outputFileName = core.getInput("action_output_file");
 
     let fileContent = "";
 
@@ -31112,6 +31112,10 @@ async function run() {
     const variablesToSkip = [
       "INPUT_action_input_file",
       "INPUT_action_output_file",
+      "INPUT_ACTION_INPUT_FILE",
+      "INPUT_ACTION_OUTPUT_FILE",
+      "ACTION_INPUT_FILE",
+      "ACTION_OUTPUT_FILE",
     ];
 
     for (const key in process.env) {

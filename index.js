@@ -5,7 +5,7 @@ const { readFile, writeFile } = require("node:fs/promises");
 async function run() {
   try {
     const inputFileName = core.getInput("action_input_file");
-    const outputFileName = core.getInput("action_output_file") || "app.env";
+    const outputFileName = core.getInput("action_output_file");
 
     let fileContent = "";
 
@@ -22,6 +22,8 @@ async function run() {
     const foundVariables = {};
 
     const variablesToSkip = [
+      "action_input_file",
+      "action_output_file",
       "INPUT_action_input_file",
       "INPUT_action_output_file",
       "INPUT_ACTION_INPUT_FILE",
