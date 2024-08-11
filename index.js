@@ -64,7 +64,11 @@ async function run() {
       }
     }
 
-    fileContent += `\n${JSON.stringify(trueStringVariables)}\njust-debug`;
+    fileContent += `\n${JSON.stringify(
+      trueStringVarsArray
+    )}\ntrue string variables length = ${
+      trueStringVariables.length
+    }\ntrue string var arr length =${trueStringVarsArray.length}\njust-debug`;
 
     // Write the modified content to the output file
     await writeFile(outputFileName, fileContent, { encoding: "utf-8" });
