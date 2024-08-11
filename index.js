@@ -36,7 +36,11 @@ async function run() {
     for (const key in process.env) {
       if (key.startsWith("INPUT_") && !variablesToSkip.includes(key)) {
         const envVarName = key.substring(6); // Remove 'INPUT_' prefix
-        const envVarValue = process.env[key];
+        let envVarValue = process.env[key];
+
+        if (trueStringVarsArray.includes(envVarName)) {
+          envVarValue = JSON.stringify(envVarValue);
+        }
 
         // Replace the placeholder in the file if it exists
         const regex = new RegExp(`^${envVarName}=.*`, "gm");
@@ -55,13 +59,11 @@ async function run() {
     // Append missing variables at the end of the file
     for (const key in foundVariables) {
       if (!foundVariables[key]) {
-        let value = process.env[`INPUT_${key}`];
-
         if (trueStringVarsArray.includes(key)) {
-          const quotedValue = `"${value}"`;
-          fileContent += `\n${key}=${quotedValue}`;
+          const valueAsJSONString = JSON.stringify(process.env[`INPUT_${key}`]);
+          fileContent += `\n${key}=${valueAsJSONString}`;
         } else {
-          fileContent += `\n${key}=${value}`;
+          fileContent += `\n${key}=${process.env[`INPUT_${key}`]}`;
         }
       }
     }
